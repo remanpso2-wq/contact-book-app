@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+{% block content %}
+  <div class="card">
+    <h2>🔍 検索結果</h2>
+    <div class="body">
+      {% if q %}
+        <p>「{{ q }}」の検索結果：{{ results|length }} 件</p>
+        {% if results %}
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th><th>学生</th><th>内容</th><th>日付</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for r in results %}
+              <tr>
+                <td>#{{ r.id }}</td>
+                <td>{{ r.student.name }}</td>
+                <td>{{ r.content }}</td>
+                <td>{{ r.date }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        {% else %}
+          <p class="muted">一致するレポートはありません。</p>
+        {% endif %}
+      {% else %}
+        <p class="muted">検索キーワードを入力してください。</p>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

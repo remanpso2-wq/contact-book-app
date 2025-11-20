@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+{% block title %}提出状況{% endblock %}
+{% block content %}
+<div class="card">
+  <h2>📊 提出状況</h2>
+
+  <p>総学生数：{{ summary.students }} / 提出数：{{ summary.reports }}</p>
+  <p>全体平均 体調：{{ summary.avg_condition }} / メンタル：{{ summary.avg_mental }}</p>
+
+  <div class="body" style="overflow-x: auto;">
+    <table>
+      <thead>
+        <tr>
+          <th>学生名</th>
+          <th>提出数</th>
+          <th>既読</th>
+          <th>未読</th>
+          <th>最終提出日</th>
+          <th>平均体調</th>
+          <th>平均メンタル</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in rows %}
+        <tr>
+          <td><a href="{{ url_for('student_detail', student_id=row.id) }}">{{ row.name }}</a></td>
+          <td>{{ row.total }}</td>
+          <td>{{ row.checked }}</td>
+          <td>{{ row.unchecked }}</td>
+          <td>{{ row.latest_date }}</td>
+          <td>{{ row.avg_condition }}</td>
+          <td>{{ row.avg_mental }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

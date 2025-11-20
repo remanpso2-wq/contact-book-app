@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="card">
+  <h2>📤 担任間共有メモ一覧</h2>
+  <div class="body">
+    {% if notes %}
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>作成者</th>
+            <th>内容</th>
+            <th>日付</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for note in notes %}
+          <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ note.teacher_name }}</td>
+            <td>{{ note.content }}</td>
+            <td>{{ note.date }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p class="muted">まだ共有メモはありません。</p>
+    {% endif %}
+  </div>
+</div>
+
+<div class="actions" style="margin-top: 20px;">
+  <a class="btn" href="{{ url_for('add_note') }}">✏️ メモを追加する</a>
+  <a class="btn-secondary" href="{{ url_for('index') }}">🏠 トップに戻る</a>
+  <a class="btn-secondary" href="{{ url_for('status') }}">📊 提出状況ページへ</a>
+</div>
+
+{% endblock %}

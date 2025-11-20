@@ -1,0 +1,79 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1>📊 週ごと分析ダッシュボード</h1>
+
+<div class="card">
+  <h2>🗓️ 週ごとの提出数</h2>
+  <canvas id="submitChart" height="100"></canvas>
+</div>
+
+<div class="card" style="margin-top: 30px;">
+  <h2>📈 平均体調・メンタル推移</h2>
+  <canvas id="conditionChart" height="100"></canvas>
+</div>
+
+<br>
+<a href="{{ url_for('index') }}">⬅ トップページに戻る</a>
+
+<script>
+  const labels = {{ labels|tojson }};
+  const submitCounts = {{ submit_counts|tojson }};
+  const condAvgs = {{ cond_avgs|tojson }};
+  const mentalAvgs = {{ mental_avgs|tojson }};
+
+  // 提出数グラフ
+  new Chart(document.getElementById('submitChart'), {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: '提出数',
+        data: submitCounts,
+        backgroundColor: '#4e79a7'
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { beginAtZero: true, title: { display: true, text: '件数' } }
+      }
+    }
+  });
+
+  // 体調・メンタル折れ線グラフ
+  new Chart(document.getElementById('conditionChart'), {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: '平均体調',
+          data: condAvgs,
+          borderColor: '#59a14f',
+          backgroundColor: '#59a14f33',
+          borderWidth: 2,
+          tension: 0.25
+        },
+        {
+          label: '平均メンタル',
+          data: mentalAvgs,
+          borderColor: '#e15759',
+          backgroundColor: '#e1575933',
+          borderWidth: 2,
+          tension: 0.25
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          min: 0, max: 5, ticks: { stepSize: 1 },
+          title: { display: true, text: 'レベル' }
+        }
+      }
+    }
+  });
+</script>
+{% endblock %}

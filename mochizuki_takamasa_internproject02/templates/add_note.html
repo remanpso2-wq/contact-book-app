@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="card">
+  <h2>✏️ 担任共有メモを追加</h2>
+  <form method="POST" action="{{ url_for('add_note') }}">
+    <div class="form-group">
+      <label>作成者</label>
+      <input type="text" name="teacher_name" placeholder="例：山田太郎" required />
+    </div>
+
+    <div class="form-group">
+      <label>メモ内容</label>
+      <textarea name="content" rows="5" placeholder="共有したい内容を入力してください" required></textarea>
+    </div>
+
+    <button type="submit" class="btn">📤 登録</button>
+    <a href="{{ url_for('shared_notes') }}" class="btn-secondary">🔙 戻る</a>
+  </form>
+</div>
+
+{% endblock %}

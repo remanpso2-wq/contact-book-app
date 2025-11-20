@@ -1,0 +1,91 @@
+{% extends "layout.html" %}
+{% block title %}{{ student.name }} さんの詳細{% endblock %}
+
+{% block content %}
+<div class="card">
+  <h2>👤 {{ student.name }} さんの提出推移</h2>
+  <div class="body">
+    <div class="row" style="gap:10px; flex-wrap:wrap;">
+      <div class="pill">📨 提出数：{{ total }}</div>
+      <div class="pill">✅ 既読：{{ checked }}</div>
+    </div>
+
+    <!-- 📈 推移グラフ -->
+    <div style="width:100%; overflow-x:auto; margin-top:20px;">
+      <canvas id="trend" height="100"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- 🗂 レポート一覧 -->
+<div class="card" style="margin-top:20px;">
+  <h2>📄 レポート一覧</h2>
+  <div class="body" style="overflow-x:auto;">
+    {% if reports %}
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>内容</th>
+          <th>日付</th>
+          <th>状態</th>
+          <th>体調</th>
+          <th>メンタル</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in reports %}
+        <tr>
+          <td>{{ r.id }}</td>
+          <td>{{ r.content or '（なし）' }}</td>
+          <td>{{ r.date }}</td>
+          <td>{% if r.is_checked %}✅ 既読{% else %}❌ 未読{% endif %}</td>
+          <td>{{ r.condition_level }}</td>
+          <td>{{ r.mental_level }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+      <p class="muted">📭 レポートがまだ提出されていません。</p>
+    {% endif %}
+  </div>
+</div>
+
+<!-- 📊 Chart.js スクリプト -->
+<script>
+  const labels = {{ labels|tojson }};
+  const cond = {{ cond_values|tojson }};
+  const mental = {{ mental_values|tojson }};
+
+  const ctx = document.getElementById('trend').getContext('2d');
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        { label: '体調', data: cond, tension: 0.3, borderColor: '#4e79a7', backgroundColor: 'rgba(78,121,167,0.3)', fill: false },
+        { label: 'メンタル', data: mental, tension: 0.3, borderColor: '#e15759', backgroundColor: 'rgba(225,87,89,0.3)', fill: false }
+      ]
+    },
+    options: {
+      responsive: true,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { position: 'top' },
+        tooltip: { enabled: true }
+      },
+      scales: {
+        x: { ticks: { color: '#555' } },
+        y: {
+          min: 0,
+          max: 5,
+          ticks: { stepSize: 1, color: '#555' },
+          grid: { color: 'rgba(0,0,0,0.1)' }
+        }
+      }
+    }
+  });
+</script>
+
+{% endblock %}

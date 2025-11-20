@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>レポートフィルタリング</title>
+</head>
+<body>
+    <h1>🎯 学生別＋期間別フィルタリング</h1>
+
+    <form method="POST">
+        <label>学生選択：</label>
+        <select name="student">
+            <option value="all">全員</option>
+            {% for s in students %}
+            <option value="{{ s.name }}" {% if selected_student == s.name %}selected{% endif %}>{{ s.name }}</option>
+            {% endfor %}
+        </select>
+
+        <label>開始日：</label>
+        <input type="date" name="start_date" value="{{ start_date or '' }}">
+
+        <label>終了日：</label>
+        <input type="date" name="end_date" value="{{ end_date or '' }}">
+
+        <button type="submit">フィルタ</button>
+    </form>
+
+    <hr>
+
+    <h2>結果</h2>
+    {% if results %}
+    <table border="1">
+        <tr>
+            <th>学生名</th>
+            <th>内容</th>
+            <th>提出日</th>
+            <th>既読</th>
+        </tr>
+        {% for r in results %}
+        <tr>
+            <td>{{ r.student.name }}</td>
+            <td>{{ r.content }}</td>
+            <td>{{ r.date }}</td>
+            <td>{{ "✅" if r.is_checked else "❌" }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+    <p>データがありません。</p>
+    {% endif %}
+
+    <br>
+    <a href="{{ url_for('index') }}">⬅ レポート一覧に戻る</a>
+</body>
+</html>

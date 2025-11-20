@@ -1,0 +1,52 @@
+{% extends "layout.html" %}
+{% block content %}
+  <div class="card">
+    <h2>✍ 新規レポート</h2>
+    <div class="body">
+      <form method="post">
+        <div class="row">
+          <div>
+            <label class="muted">学生名</label>
+            <input type="text" name="student_name" required placeholder="例）望月孝義">
+          </div>
+          <div>
+            <label class="muted">提出日</label>
+            <input type="date" name="date" required>
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label class="muted">体調（1-5）</label>
+            <select name="condition_level">
+              <option value="1">1（悪い）</option>
+              <option value="2">2</option>
+              <option value="3" selected>3</option>
+              <option value="4">4</option>
+              <option value="5">5（良い）</option>
+            </select>
+          </div>
+          <div>
+            <label class="muted">メンタル（1-5）</label>
+            <select name="mental_level">
+              <option value="1">1（低い）</option>
+              <option value="2">2</option>
+              <option value="3" selected>3</option>
+              <option value="4">4</option>
+              <option value="5">5（高い）</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="margin-top:12px;">
+          <label class="muted">内容</label>
+          <textarea name="content" placeholder="今日の様子やコメントなど…"></textarea>
+        </div>
+
+        <div style="margin-top:14px;">
+          <button class="btn" type="submit">登録する</button>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>📊 提出状況グラフ</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 40px;
+      background: #f9f9f9;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .chart-container {
+      width: 80%;
+      margin: 0 auto 60px;
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    canvas {
+      max-width: 100%;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>📊 提出状況の可視化</h1>
+
+  <div class="chart-container">
+    <h2>学生ごとの提出状況</h2>
+    <canvas id="barChart"></canvas>
+  </div>
+
+  <div class="chart-container">
+    <h2>日別提出数の推移</h2>
+    <canvas id="lineChart"></canvas>
+  </div>
+
+  <script>
+    const studentNames = {{ student_names|safe }};
+    const totalCounts = {{ total_counts|safe }};
+    const checkedCounts = {{ checked_counts|safe }};
+    const uncheckedCounts = {{ unchecked_counts|safe }};
+    const dates = {{ dates|safe }};
+    const dailyValues = {{ daily_values|safe }};
+
+    // 棒グラフ
+    new Chart(document.getElementById("barChart"), {
+      type: "bar",
+      data: {
+        labels: studentNames,
+        datasets: [
+          { label: "提出数", data: totalCounts, backgroundColor: "rgba(54,162,235,0.6)" },
+          { label: "既読数", data: checkedCounts, backgroundColor: "rgba(75,192,192,0.6)" },
+          { label: "未読数", data: uncheckedCounts, backgroundColor: "rgba(255,99,132,0.6)" }
+        ]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    });
+
+    // 折れ線グラフ
+    new Chart(document.getElementById("lineChart"), {
+      type: "line",
+      data: {
+        labels: dates,
+        datasets: [{
+          label: "日別提出数",
+          data: dailyValues,
+          borderColor: "rgba(54,162,235,1)",
+          backgroundColor: "rgba(54,162,235,0.2)",
+          fill: true,
+          tension: 0.2
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,75 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<h1>📚 レポート一覧</h1>
+
+<!-- 🔍 検索フォーム -->
+<form action="{{ url_for('search') }}" method="get" style="margin-bottom: 20px;">
+  <input type="text" name="q" placeholder="キーワード検索" value="{{ q or '' }}">
+  <button type="submit">検索</button>
+</form>
+
+<!-- 🧭 ページナビリンク -->
+<nav style="margin-bottom: 20px;">
+  <a href="{{ url_for('add_report') }}">✍ 新規レポート追加</a> |
+  <a href="{{ url_for('status') }}">📊 提出状況を確認</a> |
+  <a href="{{ url_for('analytics') }}">📈 週ごと分析を見る</a>
+</nav>
+
+<!-- 📄 レポート一覧テーブル -->
+<table border="1" width="100%" cellpadding="5">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>学生名</th>
+      <th>内容</th>
+      <th>日付</th>
+      <th>既読</th>
+      <th>体調</th>
+      <th>メンタル</th>
+      <th>操作</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for r in reports %}
+    <tr>
+      <td>{{ r.id }}</td>
+      <td>
+        <a href="{{ url_for('student_detail', student_id=r.student.id) }}">
+          {{ r.student.name }}
+        </a>
+      </td>
+      <td>{{ r.content or '（なし）' }}</td>
+      <td>{{ r.date }}</td>
+      <td>
+        {% if r.is_checked %}
+          ✅ 既読
+        {% else %}
+          ❌ 未読
+        {% endif %}
+      </td>
+      <td>{{ r.condition_level }}</td>
+      <td>{{ r.mental_level }}</td>
+      <td>
+        {% if not r.is_checked %}
+          <a href="{{ url_for('check_report', report_id=r.id) }}">既読にする</a>
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<!-- 👥 学生一覧 -->
+<h2 style="margin-top: 40px;">👥 登録済み学生</h2>
+<ul>
+  {% for s in students %}
+  <li>
+    <a href="{{ url_for('student_detail', student_id=s.id) }}">{{ s.name }}</a>
+  </li>
+  {% else %}
+  <li>学生が登録されていません。</li>
+  {% endfor %}
+</ul>
+
+{% endblock %}
