@@ -1,4 +1,4 @@
-# 学校連絡帳管理 PoC（課題②）
+# 学校連絡帳管理 PoC
 
 学校現場で使用されている「連絡帳（体調・メンタル・振り返り）」をデジタル化し、  
 **提出状況の可視化・担任の確認作業の効率化・週次分析・担任間の情報共有** を実現した Web アプリです。
@@ -121,3 +121,4 @@ pip install -r requirements.txt
 cp .env.example .env
 python seed.py
 flask run -p 8000
+
